@@ -48,7 +48,6 @@ public class LineCreator : MonoBehaviour {
 			
 			}
 		}
-		//else if (Application.platform == RuntimePlatform.WindowsPlayer) {
 		else{
 			if (Input.GetMouseButtonDown (0)) {
 				mouseDown = true;
@@ -78,15 +77,16 @@ public class LineCreator : MonoBehaviour {
       
 	  }
 	  void OnCollisionEnter2D(Collision2D col){
-            if (col.gameObject.tag == "bomb"){
-                //blast.GetComponent<Animator>().Play("blast");
-				
-				
-				GameObject a = Instantiate(blast,col.transform.position,Quaternion.identity) as GameObject;
-				Destroy(a.gameObject,5f);
-				Destroy(col.gameObject);
-				
-		}
+            if (col.gameObject.tag == "bomb")
+			{
+			GameObject a = Instantiate(blast,col.transform.position,Quaternion.identity) as GameObject;
+			Destroy(a.gameObject,5f);
+			Destroy(col.gameObject);
+            fruitSpawner.instance.stopSpawn();
+            fruitSpawner.instance.Button.SetActive(true);
+            fruitSpawner.instance.Gamestarted = false;
+
+        }
 	}
 	  
 	}
