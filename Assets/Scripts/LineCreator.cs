@@ -1,15 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class LineCreator : MonoBehaviour {
+public class LineCreator : MonoBehaviour 
+{
 
 	int vertexCount = 0;
 	bool mouseDown = false;
 	public GameObject blast;
 	LineRenderer line;
+    public Text LastScoretext;
+    public Text HighScore;
 
-	void Awake(){
+	void Awake()
+	{
 		line = GetComponent<LineRenderer> ();
 	}
 
@@ -76,17 +81,21 @@ public class LineCreator : MonoBehaviour {
          }
       
 	  }
-	  void OnCollisionEnter2D(Collision2D col){
-            if (col.gameObject.tag == "bomb")
-			{
+	  void OnCollisionEnter2D(Collision2D col)
+	  {
+        if (col.gameObject.tag == "bomb")
+		{
 			GameObject a = Instantiate(blast,col.transform.position,Quaternion.identity) as GameObject;
 			Destroy(a.gameObject,5f);
 			Destroy(col.gameObject);
             fruitSpawner.instance.stopSpawn();
-            fruitSpawner.instance.Button.SetActive(true);
+            Score.instance.ActiveEverything();
+            Score.instance.StopScore();
+			LastScoretext.text = PlayerPrefs.GetInt("score").ToString();
+			HighScore.text = PlayerPrefs.GetInt("HighScore").ToString();
             fruitSpawner.instance.Gamestarted = false;
 
         }
 	}
 	  
-	}
+}

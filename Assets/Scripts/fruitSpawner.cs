@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class fruitSpawner : MonoBehaviour 
 {
@@ -11,7 +12,7 @@ public class fruitSpawner : MonoBehaviour
     public GameObject Button;
     public bool Gamestarted;
 
-	private void Awake()
+    private void Awake()
 	{
         instance = this;
     }
@@ -24,22 +25,24 @@ public class fruitSpawner : MonoBehaviour
 	{
 		if(Gamestarted == false)
 		{
-			Invoke("startSpawn",0.1f);
+			Invoke("startSpawn",1f);
         	Button.SetActive(false);
+            Score.instance.DeActiveEverything();
+            Score.instance.RestScore();	
             Gamestarted = true;
         }
 		
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+	{
 		
 	}
 
-	public void startSpawn(){
-		InvokeRepeating ("spawnFruitGroup",1f,7f);
-		//InvokeRepeating ("bombSpawner",8f,9f);
-	     // spawnFruitGroup();
+	public void startSpawn()
+	{
+		InvokeRepeating ("spawnFruitGroup",1f,6f);	
 	}
 	public void stopSpawn(){
 		CancelInvoke ("spawnFruitGroup");
@@ -49,7 +52,12 @@ public class fruitSpawner : MonoBehaviour
 
 	public void spawnFruitGroup()
 	{
-		StartCoroutine ("spawnFruit");	
+		StartCoroutine ("spawnFruit");
+
+		if (Random.Range(0,6) < 3)
+		{
+            bombSpawner();
+        }	
 	}
 
 	public void bombSpawner(){
@@ -64,11 +72,7 @@ public class fruitSpawner : MonoBehaviour
 
 	IEnumerator spawnFruit()
 	{
-        if (Random.Range(0,6) > 3)
-		{
-            bombSpawner();
-        }
-		for(int i = 0; 0 < 5; i++)
+		for(int i = 0; i < 5; i++)
 		{
 
 		float Rand = Random.Range (-maxX, maxX);
@@ -76,8 +80,8 @@ public class fruitSpawner : MonoBehaviour
 		GameObject f = Instantiate (fruit, pos, Quaternion.identity) as GameObject;
 		f.GetComponent<Rigidbody2D> ().AddForce (new Vector2(0, 15f), ForceMode2D.Impulse );
 		f.GetComponent<Rigidbody2D> ().AddTorque(Random.Range(-20f,20f));
+		yield return new WaitForSeconds (0.5f);
 		}
 		
-		yield return new WaitForSeconds (3f);
 	}
 }
